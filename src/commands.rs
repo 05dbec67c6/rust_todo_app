@@ -3,26 +3,46 @@ use crate::structs::Todo;
 
 pub fn show_help() {
     println!("-Type \"help\" to show this help.");
-    println!("-Type \"create\" to create a new note.");
+    println!("-Type \"create\" to create a new todo.");
+    println!("-Type \"list\" to list all todos.");
+    println!("-Type \"delete\" to delete a new todo.");
 }
 
-pub fn create_note() -> Option<Todo> {
+pub fn create_todo() -> Option<Todo> {
     println!("Enter the text for the new todo:");
-    let mut new_note = String::new();
-    stdin().read_line(&mut new_note).expect("TODO: panic message");
-    let new_note = Todo::new(new_note.trim().to_string());
-    Some(new_note)
+    let mut new_todo = String::new();
+    stdin().read_line(&mut new_todo).expect("TODO: panic message");
+    let new_todo = Todo::new(new_todo.trim().to_string());
+    println!("New todo created.");
+    Some(new_todo)
 }
 
-pub fn list_notes(vec: &Vec<Todo>) {
+pub fn list_todos(vec: &Vec<Todo>) {
+    if vec.is_empty() {
+        println!("There are no current todos.");
+        return;
+    }
     println!("Right now there are the following Todos:");
     for (index, element) in vec.iter().enumerate() {
         println!("{}. - {}", index + 1, element.todo_text)
     }
 }
 
-pub fn delete_note(vec: &Vec<Todo>) {
-    // let new_note = super::structs::Todo { todo_text: "csie".to_string() };
-    println!("this is the CREATE")
+pub fn delete_todo(vec: &mut Vec<Todo>) {
+    println!("Which todo do you want to delete?");
+    list_todos(vec);
+    let mut todo_to_delete = String::new();
+    stdin().read_line(&mut todo_to_delete).expect("TODO: panic message");
+    match todo_to_delete.trim().parse::<usize>() {
+        Ok(index) => {
+            if index == 0 || index > vec.len() {
+                println!("Invalid index.")
+            } else {
+                vec.remove(index - 1);
+                println!("Todo deleted");
+            }
+        }
+        Err(_) => println!("Not a valid number.")
+    }
 }
 
