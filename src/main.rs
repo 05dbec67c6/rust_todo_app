@@ -1,9 +1,9 @@
 mod commands;
 mod structs;
 
-use std::io::stdin;
-use crate::commands::{show_help, create_todo, list_todos, delete_todo};
+use crate::commands::{create_todo, delete_todo, list_todos, show_help};
 use crate::structs::Todo;
+use std::io::stdin;
 
 fn main() {
     let mut note_list: Vec<Todo> = vec![];
@@ -13,7 +13,7 @@ fn main() {
         if let Err(e) = process_user_command(&mut note_list) {
             println!("Error: {}", e);
         }
-        println!("-----------------------------")
+        println!("-----------------------------");
     }
 }
 
@@ -28,7 +28,7 @@ fn process_user_command(note_list: &mut Vec<Todo>) -> Result<(), String> {
         }
         "create" => {
             let new_note = create_todo();
-            if let Some(new_note) = new_note {
+            if let Ok(new_note) = new_note {
                 note_list.push(new_note);
             }
             Ok(())
@@ -49,15 +49,6 @@ fn process_user_command(note_list: &mut Vec<Todo>) -> Result<(), String> {
 }
 
 fn greetings() {
-    println!("Enter your task. Enter 'help' for help");
-
-    let a: i32 = 5;
-
-    match a {
-        5 => println!("its 5"),
-        _ => (),
-    }
-
-    if let 5 = a { println!("its 5") }
+    println!("[Enter your task. Enter 'help' for help.]");
 }
 

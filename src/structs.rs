@@ -4,7 +4,7 @@ pub(crate) struct Todo {
 }
 
 impl Todo {
-    pub(crate) fn new(todo_text: String) -> Todo {
-        Todo { todo_text }
+    pub(crate) fn new(todo_text: &str) -> Todo {
+        Todo { todo_text: todo_text.to_string() }
     }
 }

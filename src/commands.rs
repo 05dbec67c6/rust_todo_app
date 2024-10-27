@@ -6,15 +6,16 @@ pub fn show_help() {
     println!("-Type \"create\" to create a new todo.");
     println!("-Type \"list\" to list all todos.");
     println!("-Type \"delete\" to delete a new todo.");
+
 }
 
-pub fn create_todo() -> Option<Todo> {
+pub fn create_todo() -> Result<Todo, String> {
     println!("Enter the text for the new todo:");
-    let mut new_todo = String::new();
-    stdin().read_line(&mut new_todo).expect("TODO: panic message");
-    let new_todo = Todo::new(new_todo.trim().to_string());
+    let mut new_todo: String = String::new();
+    stdin().read_line(&mut new_todo).map_err(|_| "Failed to read line".to_string())?;
+    let new_todo = Todo::new(new_todo.trim());
     println!("New todo created.");
-    Some(new_todo)
+    Ok(new_todo)
 }
 
 pub fn list_todos(vec: &Vec<Todo>) {
@@ -29,6 +30,10 @@ pub fn list_todos(vec: &Vec<Todo>) {
 }
 
 pub fn delete_todo(vec: &mut Vec<Todo>) {
+    if vec.is_empty() {
+        println!("There are no current todos.");
+        return;
+    }
     println!("Which todo do you want to delete?");
     list_todos(vec);
     let mut todo_to_delete = String::new();
